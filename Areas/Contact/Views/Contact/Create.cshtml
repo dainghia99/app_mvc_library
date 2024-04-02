@@ -1,0 +1,101 @@
+@model appmvclibrary.Models.Contact
+
+@{
+    ViewData["Title"] = "Liên Hệ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-5">
+    <div class="container py-5">
+    <div class="bg-light rounded p-5">
+        <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="">
+            <h1 class="mb-4">Liên hệ cho Library</h1>
+            <p class="mb-4">
+                Cảm ơn bạn đã góp ý cho chúng tôi!
+            </p>
+            <div class="rounded">
+                <iframe
+                class="rounded w-100"
+                style="height: 425px"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3726.1226029855684!2d105.75737543537814!3d20.94759102266966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313452eaa9c461c3%3A0x2a3e1c421f299adc!2zVHLGsOG7nW5nIMSQ4bqhaSBI4buNYyDEkOG6oWkgTmFt!5e0!3m2!1svi!2s!4v1711687015068!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                ></iframe>
+            </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <form asp-action="Create" asp-controller="Contact" asp-area="Contact" class="mb-4">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <input
+                        asp-for="Name"
+                        type="text"
+                        class="w-100 form-control border-0 py-3"
+                    />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-lg-6">
+                    <input
+                        asp-for="Email"
+                        class="w-100 form-control border-0 py-3"
+                    />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-lg-6">
+                    <input
+                        asp-for="Phone"
+                        class="w-100 form-control border-0 py-3"
+                    />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="col-lg-6">
+                    <input
+                        asp-for="Title"
+                        class="w-100 form-control border-0 py-3"
+                    />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <textarea
+                        asp-for="Message"
+                        class="w-100 form-control border-0"
+                        rows="6"
+                        cols="10"
+                    ></textarea>
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <button
+                        class="w-100 btn btn-primary form-control py-3"
+                        type="submit"
+                    >
+                        Gửi
+                    </button>
+                </div>
+            </div>
+            </form>
+            <div>
+                <a asp-action="Index" asp-area="" asp-controller="Home">Quay lại trang chủ</a>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+@section Script {
+    <script>
+        Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: message,
+                showConfirmButton: false,
+                timer: 1500
+        });
+        
+        
+    </script>
+    
+}
