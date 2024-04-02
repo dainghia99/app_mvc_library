@@ -1,0 +1,75 @@
+@model IEnumerable<appmvclibrary.Models.Sach>
+@using Microsoft.EntityFrameworkCore
+@{
+    ViewData["Title"] = "Quản lý sách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Thêm mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TenSach)
+            </th>
+            <th>
+                Thể loại sách
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPublic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slug)
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">
+                    @Html.DisplayFor(modelItem => item.TenSach)
+                </a>
+                
+            </td>
+            <td>
+                <small>@string.Join(", ", item.SachCategories.Select(x => x.Category.Title))</small>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPublic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slug)
+            </td>
+            <td>
+                
+                <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Xoá</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

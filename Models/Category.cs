@@ -34,6 +34,8 @@ namespace appmvclibrary.Models
       [Display(Name = "Url hiện thị")]
       public string Slug { set; get; }
 
+      public List<SachCategory>? SachCategories {get; set;}
+
       // Các Category con
       public ICollection<Category>? CategoryChildren { get; set; }
 

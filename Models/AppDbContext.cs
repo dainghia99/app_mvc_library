@@ -20,9 +20,15 @@ namespace appmvclibrary.Models
             //         entityType.SetTableName (tableName.Substring (6));
             //     }
             // }
+
+            builder.Entity<SachCategory>(entity => {
+                entity.HasKey(x => new {x.SachId, x.CategoryId});
+            });
         }
 
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Category> Categories {get; set;}
+        public DbSet<Sach> Sachs { get; set; }
+        public DbSet<SachCategory> SachCategories { get; set; }
     }
 }

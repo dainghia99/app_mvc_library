@@ -1,0 +1,25 @@
+@model appmvclibrary.Models.Sach
+
+@{
+    ViewData["Title"] = "Xác nhận xoá sách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>Bạn có chắc chắn xoá?</h3>
+<div>
+    
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TenSach)
+        </dt>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xoá" class="btn btn-danger" /> |
+        <a asp-action="Index">Quản lý sách</a>
+    </form>
+</div>
