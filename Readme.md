@@ -1,8 +1,17 @@
 # Những phần đã thêm
 
-- Thêm phần model cho sách và ràng buộc các mối quan hệ của sách
+- Đã song phần View của trang Edit (HTTPGET) của model tác giả
 
 # Những phần cần làm tiếp
 
-- Kiểm tra lại toàn bộ
-- Add migrations cho model và generator lại area Category (vì đã thêm phần ràng buộc sách vào category)
+- Chuyển sang chỉnh sửa controller của phương thức post nằm trong
+
+```
+    area/quanlytacgia/controller/TacgiaController/[Action](Edit)
+```
+
+của area
+
+```
+    QuanLyTacGia
+```

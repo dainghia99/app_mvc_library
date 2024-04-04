@@ -1,0 +1,21 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace appmvclibrary.Models
+{
+    public class TacGiaSach
+    {
+        [Key]
+        public int Id {get; set;}
+        [ForeignKey("SachId")]
+        public int SachId {get; set;}
+        [ForeignKey("TacGiaId")]
+        public int TacGiaId {get; set;}
+        public TacGia TacGia {get; set;}
+        public Sach Sach {get; set;}
+    }
+}

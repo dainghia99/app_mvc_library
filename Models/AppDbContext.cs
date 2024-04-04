@@ -24,11 +24,16 @@ namespace appmvclibrary.Models
             builder.Entity<SachCategory>(entity => {
                 entity.HasKey(x => new {x.SachId, x.CategoryId});
             });
+            builder.Entity<TacGiaSach>(entity => {
+                entity.HasKey(x => new {x.SachId, x.TacGiaId});
+            });
         }
 
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Category> Categories {get; set;}
         public DbSet<Sach> Sachs { get; set; }
         public DbSet<SachCategory> SachCategories { get; set; }
+        public DbSet<TacGia> TacGias { get; set; }
+        public DbSet<TacGiaSach> TacGiaSachs { get; set; }
     }
 }
