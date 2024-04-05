@@ -152,17 +152,14 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
                     if (sachCuSoHuu != null)
                     {
                         // Xoá sách cũ
-                        var newSachId = SachId;
 
-                        var sachRemove = from sachCu in tg.TacGiaSach
-                                        where !newSachId.Contains(sachCu.Sach.Id)
-                                        select sachCu;
-
+                        // Lọc ra toàn bộ sách cũ thuộc tác giả để xoá
+                        var sachRemove = tg.TacGiaSach
+                                        .Where(s => !SachId.Contains(s.Sach.Id))
+                                        .ToList();
                         _context.TacGiaSachs.RemoveRange(sachRemove);
-                                        
                     }
                     
-
                     foreach (var idSachMoi in SachId)
                     {
                         var sach = await _context.Sachs

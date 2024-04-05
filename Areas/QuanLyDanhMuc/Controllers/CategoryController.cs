@@ -10,7 +10,7 @@ using appmvclibrary.Models;
 namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
 {
     [Area("QuanLyDanhMuc")]
-    [Route("/admin/category/[action]/{id?}")]
+    [Route("/admin/quan-ly-danh-muc-sach/[action]/{id?}")]
     public class CategoryController : Controller
     {
         private readonly AppDbContext _context;
