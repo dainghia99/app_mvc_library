@@ -29,7 +29,7 @@ namespace appmvclibrary.Models
         [Display(Name = "Chuỗi hiển thị")]
         public string Slug { get; set; }
 
-        public List<TacGiaSach>? TacGiaSach { get; set; }
+        public virtual List<TacGiaSach>? TacGiaSach { get; set; }
         public List<SachCategory>? SachCategories {get; set;}
         [Display(Name = "Ngày tạo")]
         public DateTime Created { get; set; }

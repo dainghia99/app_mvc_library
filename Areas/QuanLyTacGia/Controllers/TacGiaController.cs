@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using appmvclibrary.Models;
+using Org.BouncyCastle.Asn1.X509;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
 {
@@ -73,7 +75,6 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
                 tacGia.UpdatedAt = DateTime.Now;
                 _context.Add(tacGia);
                 if (SachId == null) new int {};
-                if (SachId[0] == -1) new int {};
                 foreach (var id in SachId)
                 {
                     var sach = await _context.Sachs
@@ -123,7 +124,7 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NgaySinh,TieuSu,CreatedAt,UpdatedAt")] TacGia tacGia)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NgaySinh,TieuSu")] TacGia tacGia, int [] SachId)
         {
             if (id != tacGia.Id)
             {
@@ -134,7 +135,49 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
             {
                 try
                 {
+                    tacGia.CreatedAt = DateTime.Now;
+                    tacGia.UpdatedAt = DateTime.Now;
                     _context.Update(tacGia);
+
+                    if (SachId == null) SachId = new int[] {};
+                    
+                    var tg = await _context.TacGias
+                            .Include(x => x.TacGiaSach)
+                            .ThenInclude(x => x.Sach)
+                            .FirstOrDefaultAsync(x => x.Id == id);
+
+                    
+                    var sachCuSoHuu = tacGia.TacGiaSach?.Select(x => x.Sach?.Id).ToList();
+
+                    if (sachCuSoHuu != null)
+                    {
+                        // Xoá sách cũ
+                        var newSachId = SachId;
+
+                        var sachRemove = from sachCu in tg.TacGiaSach
+                                        where !newSachId.Contains(sachCu.Sach.Id)
+                                        select sachCu;
+
+                        _context.TacGiaSachs.RemoveRange(sachRemove);
+                                        
+                    }
+                    
+
+                    foreach (var idSachMoi in SachId)
+                    {
+                        var sach = await _context.Sachs
+                                    .Include(x => x.TacGiaSach)
+                                    .FirstOrDefaultAsync(x => x.Id == idSachMoi);
+
+                        _context.TacGiaSachs.Add(new TacGiaSach() {
+                            SachId = idSachMoi,
+                            TacGiaId = id,
+                            Sach = sach,
+                            TacGia = tg
+                        });
+                        
+                    }
+                    
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

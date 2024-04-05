@@ -20,6 +20,6 @@ namespace appmvclibrary.Models
         public string? TieuSu {get; set;}
         public DateTime? CreatedAt {get; set;}
         public DateTime? UpdatedAt {get; set;}
-        public List<TacGiaSach>? TacGiaSach {get; set;}
+        public virtual List<TacGiaSach>? TacGiaSach {get; set;}
     }
 }

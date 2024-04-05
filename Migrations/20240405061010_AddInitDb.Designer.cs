@@ -12,8 +12,8 @@ using appmvclibrary.Models;
 namespace appmvclibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240404150907_AddTacGiaFix1")]
-    partial class AddTacGiaFix1
+    [Migration("20240405061010_AddInitDb")]
+    partial class AddInitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -183,13 +183,10 @@ namespace appmvclibrary.Migrations
 
             modelBuilder.Entity("appmvclibrary.Models.TacGiaSach", b =>
                 {
-                    b.Property<int>("SachId")
+                    b.Property<int?>("SachId")
                         .HasColumnType("int");
 
                     b.Property<int>("TacGiaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.HasKey("SachId", "TacGiaId");

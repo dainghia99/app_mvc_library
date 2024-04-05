@@ -9,13 +9,11 @@ namespace appmvclibrary.Models
 {
     public class TacGiaSach
     {
-        [Key]
-        public int Id {get; set;}
         [ForeignKey("SachId")]
-        public int SachId {get; set;}
+        public int? SachId {get; set;}
         [ForeignKey("TacGiaId")]
-        public int TacGiaId {get; set;}
-        public TacGia TacGia {get; set;}
-        public Sach Sach {get; set;}
+        public int? TacGiaId {get; set;}
+        public virtual TacGia? TacGia {get; set;}
+        public virtual Sach? Sach {get; set;}
     }
 }

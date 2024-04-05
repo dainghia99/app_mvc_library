@@ -180,13 +180,10 @@ namespace appmvclibrary.Migrations
 
             modelBuilder.Entity("appmvclibrary.Models.TacGiaSach", b =>
                 {
-                    b.Property<int>("SachId")
+                    b.Property<int?>("SachId")
                         .HasColumnType("int");
 
                     b.Property<int>("TacGiaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.HasKey("SachId", "TacGiaId");
