@@ -19,7 +19,7 @@ namespace appmvclibrary.Models
         [Display(Name = "Mô tả")]
         public string Description { get; set; }
         [Display(Name = "Trạng thái công khai")]
-        public bool? IsPublic { get; set; }
+        public bool IsPublic { get; set; }
         [Display(Name = "Trạng thái hiện tại")]
         public int State { get; set;}
         [Display(Name = "Số lượng")]

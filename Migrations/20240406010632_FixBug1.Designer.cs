@@ -12,8 +12,8 @@ using appmvclibrary.Models;
 namespace appmvclibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240405093827_FixBug")]
-    partial class FixBug
+    [Migration("20240406010632_FixBug1")]
+    partial class FixBug1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -183,10 +183,10 @@ namespace appmvclibrary.Migrations
 
             modelBuilder.Entity("appmvclibrary.Models.TacGiaSach", b =>
                 {
-                    b.Property<int?>("SachId")
+                    b.Property<int>("SachId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TacGiaId")
+                    b.Property<int>("TacGiaId")
                         .HasColumnType("int");
 
                     b.HasKey("SachId", "TacGiaId");

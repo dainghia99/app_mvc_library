@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using appmvclibrary.Models;
 using Org.BouncyCastle.Asn1.X509;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using appmvclibrary.Areas.QuanLyTacGia.Models;
 
 namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
 {
@@ -29,9 +30,9 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
         public async Task<IActionResult> Index()
         {
             var tacGias = await _context.TacGias
-                          .Include(x => x.TacGiaSach)
-                          .ThenInclude(x => x.Sach)
-                          .ToListAsync();
+                        .Include(x => x.TacGiaSach)
+                        .ThenInclude(x => x.Sach)
+                        .ToListAsync();
             return View(tacGias);
         }
 
@@ -56,39 +57,35 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
         // GET: QuanLyTacGia/TacGia/Create
         public IActionResult Create()
         {
-            ViewBag.Sachs =_context.Sachs
-                                    .Include(x => x.TacGiaSach)
-                                    .ToList();
+            var sachs = _context.Sachs.ToList();
+            ViewBag.DanhSachSachs = new SelectList(sachs, "Id", "TenSach");
             return View();
-        }
+        }   
 
         // POST: QuanLyTacGia/TacGia/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,NgaySinh,TieuSu")] TacGia tacGia, int[] SachId)
+        public async Task<IActionResult> Create([Bind("Id,Name,NgaySinh,TieuSu, SachIds")] ThemMoiTacGiaModel tacGia)
         {
             if (ModelState.IsValid)
             {
                 tacGia.CreatedAt = DateTime.Now;
                 tacGia.UpdatedAt = DateTime.Now;
-                _context.Add(tacGia);
-                if (SachId == null) new int {};
-                foreach (var id in SachId)
+
+                if (tacGia.SachIds != null)
                 {
-                    var sach = await _context.Sachs
-                                .Include(x => x.TacGiaSach)
-                                .Include(x => x.SachCategories)
-                                .FirstOrDefaultAsync(x => x.Id == id);
-                    _context.Add(new TacGiaSach()
+                    foreach (var item in tacGia.SachIds) 
                     {
-                        TacGiaId = tacGia.Id,
-                        SachId = id,
-                        Sach = sach,
-                        TacGia = tacGia
-                    });
+                        _context.Add(new TacGiaSach() {
+                            TacGia = tacGia,
+                            SachId = item
+                        });
+                    }
                 }
+
+                _context.Add(tacGia);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -103,20 +100,25 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
                 return NotFound();
             }
 
-            var tacGia = await _context.TacGias
-                .Include(x => x.TacGiaSach)
-                .ThenInclude(x => x.Sach)
-                .FirstOrDefaultAsync(x => x.Id == id);
-            ViewBag.SachUpdate = await _context.Sachs
-                                .Include(x => x.TacGiaSach)
-                                .ToListAsync();
+            var tacgia = await _context.TacGias
+                        .Include(x => x.TacGiaSach)
+                        .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (tacGia == null)
+            var tacGiaEdit = new ThemMoiTacGiaModel()
             {
-                return NotFound();
-            }
-            
-            return View(tacGia);
+                Id = tacgia.Id,
+                Name = tacgia.Name,
+                NgaySinh = tacgia.NgaySinh,
+                TieuSu = tacgia.TieuSu,
+                CreatedAt = tacgia.CreatedAt,
+                UpdatedAt = tacgia.UpdatedAt,
+                SachIds = tacgia.TacGiaSach.Select(x => x.SachId).ToArray(),
+            };
+
+            var sachs = _context.Sachs.ToList();
+            ViewBag.DanhSachSachs = new SelectList(sachs, "Id", "TenSach");
+
+            return View(tacGiaEdit);
         }
 
         // POST: QuanLyTacGia/TacGia/Edit/5
@@ -124,7 +126,7 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NgaySinh,TieuSu")] TacGia tacGia, int [] SachId)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NgaySinh,TieuSu, SachIds")] ThemMoiTacGiaModel tacGia)
         {
             if (id != tacGia.Id)
             {
@@ -137,44 +139,52 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
                 {
                     tacGia.CreatedAt = DateTime.Now;
                     tacGia.UpdatedAt = DateTime.Now;
-                    _context.Update(tacGia);
 
-                    if (SachId == null) SachId = new int[] {};
-                    
-                    var tg = await _context.TacGias
-                            .Include(x => x.TacGiaSach)
-                            .ThenInclude(x => x.Sach)
-                            .FirstOrDefaultAsync(x => x.Id == id);
+                    var listSachs = _context.Sachs.ToList();
+                    ViewBag.DanhSachSachs = new SelectList(listSachs, "Id", "TenSach");
 
-                    
-                    var sachCuSoHuu = tacGia.TacGiaSach?.Select(x => x.Sach?.Id).ToList();
+                    var tacGiaUpdate = await _context.TacGias
+                        .Include(x => x.TacGiaSach)
+                        .FirstOrDefaultAsync(x => x.Id == id);
 
-                    if (sachCuSoHuu != null)
+                    if (tacGiaUpdate == null)
                     {
-                        // Xoá sách cũ
-
-                        // Lọc ra toàn bộ sách cũ thuộc tác giả để xoá
-                        var sachRemove = tg.TacGiaSach
-                                        .Where(s => !SachId.Contains(s.Sach.Id))
-                                        .ToList();
-                        _context.TacGiaSachs.RemoveRange(sachRemove);
+                        return NotFound();
                     }
                     
-                    foreach (var idSachMoi in SachId)
-                    {
-                        var sach = await _context.Sachs
-                                    .Include(x => x.TacGiaSach)
-                                    .FirstOrDefaultAsync(x => x.Id == idSachMoi);
+                    tacGiaUpdate.Id = tacGia.Id;
+                    tacGiaUpdate.Name = tacGia.Name;
+                    tacGiaUpdate.NgaySinh = tacGia.NgaySinh;
+                    tacGiaUpdate.TieuSu = tacGia.TieuSu;
+                    tacGiaUpdate.CreatedAt = tacGia.CreatedAt;
+                    tacGiaUpdate.UpdatedAt = tacGia.UpdatedAt;
 
+                    if (tacGia.SachIds == null) tacGia.SachIds = new int[] {};
+
+                    var oldSacIds = tacGiaUpdate.TacGiaSach.Select(x => x.SachId).ToArray();
+                    var newSacIds = tacGia.SachIds;
+
+                    var removeSachCu = from sach in tacGiaUpdate.TacGiaSach
+                                        where (!newSacIds.Contains(sach.SachId))
+                                        select sach;
+
+                    _context.TacGiaSachs.RemoveRange(removeSachCu);
+
+                    var addSachIds = from sachId in newSacIds
+                                    where !oldSacIds.Contains(sachId)
+                                    select sachId;
+
+                    foreach (var addSachId in addSachIds)
+                    {
                         _context.TacGiaSachs.Add(new TacGiaSach() {
-                            SachId = idSachMoi,
                             TacGiaId = id,
-                            Sach = sach,
-                            TacGia = tg
+                            SachId = addSachId
                         });
-                        
                     }
+
                     
+
+                    _context.Update(tacGiaUpdate);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

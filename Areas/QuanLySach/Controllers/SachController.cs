@@ -26,8 +26,11 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
         {
             var sachs = await _context.Sachs
                         .Include(x => x.SachCategories)
-                        .ThenInclude(x => x.Category)
+                            .ThenInclude(x => x.Category)
+                        .Include(x => x.TacGiaSach)
+                            .ThenInclude(x => x.TacGia)
                         .ToListAsync();
+
             return View(sachs);
         }
 

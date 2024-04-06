@@ -1,4 +1,4 @@
-@model appmvclibrary.Models.TacGia
+@model appmvclibrary.Areas.QuanLyTacGia.Models.ThemMoiTacGiaModel
 
 @{
     ViewData["Title"] = "Thêm mới tác giả";
@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -21,17 +21,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Sách đã sáng tác</label>
-                <select id="thuvien" name="SachId" multiple="multiple" class="w-100">
-                    @if (danhSachs == null) {
-                        <option value="-1">Không có tác giả</option>
-                    } else {
-                        @foreach (var tacGia in danhSachs)
-                        {
-                            <option value="@tacGia.Id">@tacGia.TenSach</option>
-                        }
-                    }
-                    
-                </select>
+                <select asp-for="SachIds" asp-items="ViewBag.DanhSachSachs" multiple="multiple" class="w-100"></select>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -61,7 +51,7 @@
     <link rel="stylesheet" href="~/lib/multiple-select/multiple-select.min.css" />
 
     <script>
-        $("#thuvien").multipleSelect({
+        $("#SachIds").multipleSelect({
             selectAll: false,
             keepOpen: false,
             isOpen: false,

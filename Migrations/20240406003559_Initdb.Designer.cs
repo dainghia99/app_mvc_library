@@ -12,8 +12,8 @@ using appmvclibrary.Models;
 namespace appmvclibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240405061010_AddInitDb")]
-    partial class AddInitDb
+    [Migration("20240406003559_Initdb")]
+    partial class Initdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,7 +108,7 @@ namespace appmvclibrary.Migrations
                     b.Property<decimal>("Gia")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("IsPublic")
+                    b.Property<bool?>("IsPublic")
                         .HasColumnType("bit");
 
                     b.Property<string>("MoTaNgan")
@@ -186,7 +186,7 @@ namespace appmvclibrary.Migrations
                     b.Property<int?>("SachId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TacGiaId")
+                    b.Property<int?>("TacGiaId")
                         .HasColumnType("int");
 
                     b.HasKey("SachId", "TacGiaId");

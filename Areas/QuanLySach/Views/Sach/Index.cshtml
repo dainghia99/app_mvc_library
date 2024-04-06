@@ -15,6 +15,7 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.TenSach)
+                
             </th>
             <th>
                 Thể loại sách
@@ -31,9 +32,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Gia)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Slug)
-            </th>
+
             
         </tr>
     </thead>
@@ -44,10 +43,15 @@
                 <a asp-action="Edit" asp-route-id="@item.Id">
                     @Html.DisplayFor(modelItem => item.TenSach)
                 </a>
-                
+                <div>
+                    Tác giả: 
+                    
+                    <small>@string.Join(", ", item.TacGiaSach.Select(x => x.TacGia.Name))</small>
+                    
+                </div>
             </td>
             <td>
-                <small>@string.Join(", ", item.SachCategories.Select(x => x.Category.Title))</small>
+                <small>@string.Join(", ", item.SachCategories.Select(x => x?.Category?.Title))</small>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsPublic)
@@ -62,10 +66,6 @@
                 @Html.DisplayFor(modelItem => item.Gia)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Slug)
-            </td>
-            <td>
-                
                 <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Xoá</a>
             </td>
