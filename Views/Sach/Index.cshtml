@@ -1,0 +1,95 @@
+@model appmvclibrary.Models.Sach
+
+@{
+    ViewData["Title"] = "Thông tin chi tiết";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="mb-4">
+                        <div class="h1 display-5">@Model.TenSach</div>
+                    </div>
+                    <div class="position-relative rounded overflow-hidden mb-3">
+                        <img src="@Model.Images[0].ImageUrl" class="img-zoomin img-fluid rounded w-100" alt="">
+                    </div>
+                    <hr>
+                    <h3 class="my-4">Thông tin chi tiết:</h3>
+                    <h4 class="my-4">Tên sách: @Model.TenSach</h4>
+                    <h6 class="my-4">Thể loại:
+                        <small>@string.Join(", ", Model.SachCategories.Select(x => x.Category.Title))</small>
+                    </h6>
+                    <h6 class="my-4">Tác Giả:
+                        <small>@string.Join(", ", Model.TacGiaSach.Select(x => x.TacGia.Name))</small>
+                    </h6>
+                    <h6>Giá: @Math.Floor(Model.Gia).ToString() VND</h6>
+                    <hr>
+                    <a href="" class="btn btn-primary">Mượn sách</a>
+                    <a asp-action="Index" asp-area="" asp-controller="Home" class="">Quay lại trang chủ</a>
+                    <p class="my-4">@Model.MoTaNgan
+                    </p>
+                    <p class="my-4">@Model.MoTaNgan
+                    </p>
+                    <p class="my-4">
+                        @Model.Description
+                    </p>
+                    <div class="bg-light p-4 mb-4 rounded border-start border-3 border-primary">
+                        <h1 class="mb-2">@Model.TenSach</h1>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-6">
+                            <div class="rounded overflow-hidden">
+                                <img src="img/news-6.jpg" class="img-zoomin img-fluid rounded w-100" alt="">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="rounded overflow-hidden">
+                                <img src="img/news-5.jpg" class="img-zoomin img-fluid rounded w-100" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="p-3 rounded border">
+                                <h4 class="mb-4">Những cuốn sách đang HOT nhất hiện nay</h4>
+                                <div class="row g-4">
+                                    @{
+                                        var sachHots = ViewBag.SachHots as List<appmvclibrary.Models.Sach>;
+                                    }
+                                    @foreach (var item in sachHots)
+                                    {
+                                        <div class="col-12">
+                                            <div class="row g-4 align-items-center features-item">
+                                                <div class="col-4">
+                                                    <div class="rounded-circle position-relative">
+                                                        <div class="overflow-hidden rounded-circle">
+                                                            <img src="@item.Images[0].ImageUrl" class="img-zoomin img-fluid rounded-circle w-100" alt="@item.TenSach">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-8">
+                                                    <div class="features-content d-flex flex-column">
+                                                        <p class="text-uppercase mb-2">
+                                                            <small>@string.Join(", ", item?.SachCategories?.Select(x => x.Category.Title))</small>
+                                                        </p>
+                                                        <a asp-action="Index" asp-area="" asp-controller="Sach" asp-route-slug="@item.Slug"  class="h6">
+                                                            @item.TenSach
+                                                        </a>
+                                                        <small><i class="bi bi-people"></i> Tác giả: @string.Join(", ", item.TacGiaSach.Select(x => x.TacGia.Name))</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
