@@ -35,5 +35,6 @@ namespace appmvclibrary.Models
         public DbSet<SachCategory> SachCategories { get; set; }
         public DbSet<TacGia> TacGias { get; set; }
         public DbSet<TacGiaSach> TacGiaSachs { get; set; }
+        public DbSet<Image> Images { get; set; }
     }
 }

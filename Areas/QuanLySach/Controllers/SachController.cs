@@ -15,10 +15,14 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
     public class SachController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ILogger<SachController> _logger;
 
-        public SachController(AppDbContext context)
+        public SachController(AppDbContext context, IWebHostEnvironment webHostEnvironment, ILogger<SachController> logger)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+            _logger = logger;
         }
 
         // GET: QuanLySach/Sach
@@ -29,6 +33,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                             .ThenInclude(x => x.Category)
                         .Include(x => x.TacGiaSach)
                             .ThenInclude(x => x.TacGia)
+                        .Include(x => x.Images)
                         .ToListAsync();
 
             return View(sachs);
@@ -65,7 +70,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TenSach,MoTaNgan,Description,IsPublic,Quantity,Gia,Slug, CategoryIds")] ThemMoiSachModel sach)
+        public async Task<IActionResult> Create([Bind("TenSach,MoTaNgan,Description,IsPublic,Quantity,Gia,Slug, CategoryIds")] ThemMoiSachModel sach, IFormFile[] files)
         {
             if (ModelState.IsValid)
             {
@@ -83,6 +88,21 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                         });
                     }
                 }
+
+                foreach (var item in files)
+                {
+                    // Images
+                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", item.FileName);
+                    using var fileStream = new FileStream(filePath, FileMode.Create);
+                    var image = new Image()
+                    {
+                        Sach = sach,
+                        ImageUrl = "/Images/" + item.FileName
+                    };
+                    _context.Images.Add(image);
+                    item.CopyTo(fileStream);
+                }
+
                 _context.Add(sach);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -101,6 +121,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
             // var sach = await _context.Sachs.FindAsync(id);
             var sach = await _context.Sachs
                         .Include(x => x.SachCategories)
+                        .Include(x => x.Images)
                         .FirstOrDefaultAsync(x => x.Id == id);
 
             if (sach == null)
@@ -123,11 +144,8 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
             
 
             var theLoaiSach = _context.Categories.ToList();
-            theLoaiSach.Insert(0, new Category(){
-                Id = -1,
-                Title = "Không có thể loại",
-            });
             ViewBag.DanhSachTheLoai = new MultiSelectList(theLoaiSach, "Id", "Title");
+            ViewBag.Images = sach.Images.Select(x => x.ImageUrl);
             return View(postEdit);
         }
 
@@ -136,7 +154,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TenSach,MoTaNgan,Description,IsPublic,Quantity,Gia,Slug, CategoryIds")] ThemMoiSachModel sach)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TenSach,MoTaNgan,Description,IsPublic,Quantity,Gia,Slug, CategoryIds")] ThemMoiSachModel sach, IFormFile[] files)
         {
             if (id != sach.Id)
             {
@@ -158,6 +176,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
 
                     var sachUpdate = await _context.Sachs
                         .Include(x => x.SachCategories)
+                        .Include(x => x.Images)
                         .FirstOrDefaultAsync(x => x.Id == id);
 
                     if (sachUpdate == null)
@@ -197,6 +216,21 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                             SachId = id,
                             CategoryId = item
                         });
+                    }
+
+                    var fileCu = sachUpdate.Images.Select(x => x.ImageUrl).ToList();
+                    var fileMoi = files.Select(x => x.FileName).ToList();
+                    foreach (var item in files)
+                    {
+                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", item.FileName);
+                        using var fileStream = new FileStream(filePath, FileMode.Create);
+                        var image = new Image()
+                        {
+                            Sach = sach,
+                            ImageUrl = "/Images/" + item.FileName
+                        };
+                        _context.Images.Add(image);
+                        item.CopyTo(fileStream);
                     }
 
                     _context.Update(sachUpdate);

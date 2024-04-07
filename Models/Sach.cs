@@ -28,7 +28,7 @@ namespace appmvclibrary.Models
         public Decimal Gia {get; set; }
         [Display(Name = "Chuỗi hiển thị")]
         public string Slug { get; set; }
-
+        public List<Image>? Images { get; set; }
         public virtual List<TacGiaSach>? TacGiaSach { get; set; }
         public List<SachCategory>? SachCategories {get; set;}
         [Display(Name = "Ngày tạo")]
