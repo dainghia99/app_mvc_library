@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using appmvclibrary.Models;
 using appmvclibrary.Areas.QuanLySach.Models;
+using System.Text;
+using System.Globalization;
 
 namespace appmvclibrary.Areas.QuanLySach.Controllers
 {
@@ -16,13 +18,12 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly ILogger<SachController> _logger;
 
-        public SachController(AppDbContext context, IWebHostEnvironment webHostEnvironment, ILogger<SachController> logger)
+        public SachController(AppDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
-            _logger = logger;
+           
         }
 
         // GET: QuanLySach/Sach
@@ -70,7 +71,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TenSach,MoTaNgan,Description,IsPublic,Quantity,Gia,Slug, CategoryIds")] ThemMoiSachModel sach, IFormFile[] files)
+        public async Task<IActionResult> Create([Bind("TenSach,MoTaNgan,Description,IsPublic,Quantity,Gia, CategoryIds")] ThemMoiSachModel sach, IFormFile[] files)
         {
             if (ModelState.IsValid)
             {
@@ -78,6 +79,10 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                 sach.Created = DateTime.Now;
                 sach.UpdatAt = DateTime.Now;
                 sach.State = 1;
+                var val = RemoveDiacritics(sach.TenSach);
+                var slug = val.Replace(" ", "-");
+                slug = slug.ToLower();
+                sach.Slug = slug;
                 if (sach.CategoryIds != null) 
                 {
                     foreach (var item in sach.CategoryIds) 
@@ -154,7 +159,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TenSach,MoTaNgan,Description,IsPublic,Quantity,Gia,Slug, CategoryIds")] ThemMoiSachModel sach, IFormFile[] files)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TenSach,MoTaNgan,Description,IsPublic,Quantity,Gia, CategoryIds")] ThemMoiSachModel sach, IFormFile[] files)
         {
             if (id != sach.Id)
             {
@@ -184,6 +189,10 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                         return NotFound();
                     }
 
+                    var val = RemoveDiacritics(sach.TenSach);
+                    var slug = val.Replace(" ", "-");
+                    slug = slug.ToLower();
+
                     sachUpdate.Id = sach.Id;
                     sachUpdate.TenSach = sach.TenSach;
                     sachUpdate.MoTaNgan = sach.MoTaNgan;
@@ -191,7 +200,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                     sachUpdate.IsPublic = sach.IsPublic;
                     sachUpdate.Quantity = sach.Quantity;
                     sachUpdate.Gia = sach.Gia;
-                    sachUpdate.Slug = sach.Slug;
+                    sachUpdate.Slug = slug;
                     sachUpdate.Created = DateTime.Now;
                     sachUpdate.UpdatAt = DateTime.Now;
                     
@@ -213,7 +222,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                     foreach (var item in addCateIds)
                     {
                         _context.SachCategories.Add(new SachCategory() {
-                            SachId = id,
+                            Sach = sachUpdate,
                             CategoryId = item
                         });
                     }
@@ -288,6 +297,23 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
         private bool SachExists(int id)
         {
             return _context.Sachs.Any(e => e.Id == id);
+        }
+
+        string RemoveDiacritics(string text)
+        {
+            string normalizedString = text.Normalize(NormalizationForm.FormD);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (char c in normalizedString)
+            {
+                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }

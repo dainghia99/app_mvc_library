@@ -177,7 +177,7 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
                     foreach (var addSachId in addSachIds)
                     {
                         _context.TacGiaSachs.Add(new TacGiaSach() {
-                            TacGiaId = id,
+                            TacGia = tacGiaUpdate,
                             SachId = addSachId
                         });
                     }

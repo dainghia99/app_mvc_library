@@ -11,6 +11,7 @@ namespace appmvclibrary.Models
         [Key]
         public int Id {get; set;}
         [Display(Name = "Tên tác giả")]
+        // [RegularExpression(@"^[^\W_""]*$", ErrorMessage = "Chỉ dùng các ký tự thường")]
         [Required(ErrorMessage = "Vui lòng nhập trường này")]
         public string Name {get; set;}
         [Display(Name = "Ngày sinh")]

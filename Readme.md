@@ -1,17 +1,7 @@
 # Những phần đã thêm
 
-- Đã song phần View của trang Edit (HTTPGET) của model tác giả
+- Thêm nút thông tin chi tiết của từng loại sách
 
 # Những phần cần làm tiếp
 
-- Chuyển sang chỉnh sửa controller của phương thức post nằm trong
-
-```
-    area/quanlytacgia/controller/TacgiaController/[Action](Edit)
-```
-
-của area
-
-```
-    QuanLyTacGia
-```
+- Cần chỉnh sửa giao diện trang chi tiết sách

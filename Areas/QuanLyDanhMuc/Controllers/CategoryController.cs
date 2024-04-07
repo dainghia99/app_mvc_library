@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using appmvclibrary.Models;
+using System.Text;
+using System.Globalization;
 
 namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
 {
@@ -63,11 +65,15 @@ namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ParentCategoryId,Title,Content,Slug")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,ParentCategoryId,Title,Content")] Category category)
         {
             if (ModelState.IsValid)
             {
                 if (category.ParentCategoryId == -1) category.ParentCategoryId = null;
+                var val = RemoveDiacritics(category.Title);
+                var slug = val.Replace(" ", "-");
+                slug = slug.ToLower();
+                category.Slug = slug;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -127,6 +133,10 @@ namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
                 {
                     
                     if (category.ParentCategoryId == -1) category.ParentCategoryId = null;
+                    var val = RemoveDiacritics(category.Title);
+                    var slug = val.Replace(" ", "-");
+                    slug = slug.ToLower();
+                    category.Slug = slug;
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
@@ -190,6 +200,23 @@ namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);
+        }
+
+        string RemoveDiacritics(string text)
+        {
+            string normalizedString = text.Normalize(NormalizationForm.FormD);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (char c in normalizedString)
+            {
+                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }

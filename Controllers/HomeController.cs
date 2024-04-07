@@ -20,7 +20,8 @@ public class HomeController : Controller
     {
         var sachPublisheds = await _context.Sachs?
                             .Include(s => s.TacGiaSach)
-                            .ThenInclude(x => x.TacGia)
+                                .ThenInclude(x => x.TacGia)
+                            .Include(x => x.Images)
                             .Where(x => x.IsPublic == true)
                             .ToListAsync();
         return View(sachPublisheds);

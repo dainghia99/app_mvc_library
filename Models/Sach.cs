@@ -11,6 +11,7 @@ namespace appmvclibrary.Models
         [Key]
         public int Id { get; set; }
         [Display(Name = "Tên sách")]
+        // [RegularExpression(@"^[^\W_""]*$", ErrorMessage = "Chỉ dùng các ký tự thường")]
         [Required(ErrorMessage = "Vui lòng nhập trường này")]
         public string TenSach { get; set; }
         [Display(Name = "Mô tả ngắn")]
@@ -27,7 +28,7 @@ namespace appmvclibrary.Models
         [Display(Name = "Giá")]
         public Decimal Gia {get; set; }
         [Display(Name = "Chuỗi hiển thị")]
-        public string Slug { get; set; }
+        public string? Slug { get; set; }
         public List<Image>? Images { get; set; }
         public virtual List<TacGiaSach>? TacGiaSach { get; set; }
         public List<SachCategory>? SachCategories {get; set;}
