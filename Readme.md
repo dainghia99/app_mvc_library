@@ -1,7 +1,7 @@
 # Những phần đã thêm
 
-- Thêm nút thông tin chi tiết của từng loại sách
+- Hoàn tất giao diện trang chủ
 
 # Những phần cần làm tiếp
 
-- Cần chỉnh sửa giao diện trang chi tiết sách
+- Thêm chức năng Mượn sách và tích hợp Identity để đăng nhập đăng ký
