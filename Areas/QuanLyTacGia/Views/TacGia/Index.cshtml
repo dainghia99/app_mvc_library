@@ -3,13 +3,13 @@
 
 @{
     ViewData["Title"] = "Danh sách tác giả";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Thêm mới</a>
+    <a asp-action="Create" class="btn btn-primary">Thêm mới</a>
 </p>
 <table class="table">
     <thead>

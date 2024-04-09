@@ -11,21 +11,21 @@ namespace appmvclibrary.Models
         [Key]
         public int Key { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập trường này")]
-        [Display(Prompt = "Họ và tên")]
+        [Display(Name = "Họ và tên", Prompt = "Họ và tên")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập trường này")]
-        [Display(Prompt = "Địa chỉ email")]
+        [Display(Name = "Địa chỉ email", Prompt = "Địa chỉ email")]
         [EmailAddress(ErrorMessage = "Địa chỉ email không hợp lệ")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập trường này")]
-        [Display(Prompt = "Số điện thoại")]
+        [Display(Name = "Số điện thoại", Prompt = "Số điện thoại")]
         [Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
         public string Phone { get; set; }
-        [Display(Prompt = "Tiêu đề")]
+        [Display(Name = "Tiêu đề", Prompt = "Tiêu đề")]
         public string Title { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập trường này")]
-        [Display(Prompt = "Nội dung")]
+        [Display(Name = "Nội dung của liên hệ", Prompt = "Nội dung")]
         public string Message { get; set; }
     }
 }

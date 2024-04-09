@@ -13,7 +13,7 @@ using System.Globalization;
 namespace appmvclibrary.Areas.QuanLySach.Controllers
 {
     [Area("QuanLySach")]
-    [Route("/admin/quan-ly-sach/[action]/{id?}")]
+    [Route("/quan-ly-sach/[action]/{id?}")]
     public class SachController : Controller
     {
         private readonly AppDbContext _context;

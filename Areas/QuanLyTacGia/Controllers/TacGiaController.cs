@@ -13,7 +13,7 @@ using appmvclibrary.Areas.QuanLyTacGia.Models;
 namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
 {
     [Area("QuanLyTacGia")]
-    [Route("/admin/quan-ly-tac-gia/[action]/{id?}")]
+    [Route("/quan-ly-tac-gia/[action]/{id?}")]
     public class TacGiaController : Controller
     {
         private readonly AppDbContext _context;

@@ -12,7 +12,7 @@ using System.Globalization;
 namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
 {
     [Area("QuanLyDanhMuc")]
-    [Route("/admin/quan-ly-danh-muc-sach/[action]/{id?}")]
+    [Route("/quan-ly-danh-muc-sach/[action]/{id?}")]
     public class CategoryController : Controller
     {
         private readonly AppDbContext _context;
