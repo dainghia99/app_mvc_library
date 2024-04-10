@@ -1,0 +1,72 @@
+@model IEnumerable<appmvclibrary.Models.Order>
+
+@{
+    ViewData["Title"] = "Đơn order";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tên
+            </th>
+            <th>
+                Lớp
+            </th>
+            <th>
+                Mã sinh viên
+            </th>
+            <th>
+                Sách
+            </th>
+            <th>
+                Ngày Mượn
+            </th>
+            <th>
+                Ngày đến hạn
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+
+        foreach (var p in item.PhieuMuonTra)
+        {
+            <tr>
+                <td>
+                    @p.Name
+                </td>
+                <td>
+                    @p.Lop
+                </td>
+                <td>
+                    @p.MaSinhVien
+                </td>
+                <td>
+                    @p.sach.TenSach
+                </td>
+                <td>
+                    @p.NgayMuon
+                </td>
+                <td>
+                    @p.NgayTra
+                </td>
+                <td>
+                    <form asp-action="Create" asp-route-id="@p.Id">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <input type="submit" value="Xác thực" class="btn btn-primary" />
+                        </div>
+                    </form>
+                    @* <a asp-action="Delete" asp-route-id="@item.Id">Xoá</a> *@
+                </td>
+            </tr>
+        }
+}
+    </tbody>
+</table>

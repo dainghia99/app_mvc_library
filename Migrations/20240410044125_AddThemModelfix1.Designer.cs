@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using appmvclibrary.Models;
 
@@ -11,9 +12,11 @@ using appmvclibrary.Models;
 namespace appmvclibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240410044125_AddThemModelfix1")]
+    partial class AddThemModelfix1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,9 +157,6 @@ namespace appmvclibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("LichSuMuonTraId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Lop")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -192,8 +192,6 @@ namespace appmvclibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LichSuMuonTraId");
-
                     b.HasIndex("OrderId");
 
                     b.HasIndex("sachId");
@@ -222,6 +220,9 @@ namespace appmvclibrary.Migrations
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LichSuMuonTraId")
+                        .HasColumnType("int");
+
                     b.Property<string>("MoTaNgan")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -243,6 +244,8 @@ namespace appmvclibrary.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LichSuMuonTraId");
 
                     b.ToTable("Sachs");
                 });
@@ -328,10 +331,6 @@ namespace appmvclibrary.Migrations
 
             modelBuilder.Entity("appmvclibrary.Models.PhieuMuonTra", b =>
                 {
-                    b.HasOne("appmvclibrary.Models.LichSuMuonTra", null)
-                        .WithMany("PhieuMuonTras")
-                        .HasForeignKey("LichSuMuonTraId");
-
                     b.HasOne("appmvclibrary.Models.Order", null)
                         .WithMany("PhieuMuonTra")
                         .HasForeignKey("OrderId");
@@ -341,6 +340,13 @@ namespace appmvclibrary.Migrations
                         .HasForeignKey("sachId");
 
                     b.Navigation("sach");
+                });
+
+            modelBuilder.Entity("appmvclibrary.Models.Sach", b =>
+                {
+                    b.HasOne("appmvclibrary.Models.LichSuMuonTra", null)
+                        .WithMany("Sachs")
+                        .HasForeignKey("LichSuMuonTraId");
                 });
 
             modelBuilder.Entity("appmvclibrary.Models.SachCategory", b =>
@@ -390,7 +396,7 @@ namespace appmvclibrary.Migrations
 
             modelBuilder.Entity("appmvclibrary.Models.LichSuMuonTra", b =>
                 {
-                    b.Navigation("PhieuMuonTras");
+                    b.Navigation("Sachs");
                 });
 
             modelBuilder.Entity("appmvclibrary.Models.Order", b =>
