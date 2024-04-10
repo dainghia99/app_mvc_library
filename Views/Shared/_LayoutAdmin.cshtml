@@ -137,6 +137,30 @@
         controller = "TacGia",
         isActive = pathName[1] == "quan-ly-tac-gia" ? "active" : ""
        },
+       new Sidebar()
+       {
+        name = "Đơn phiếu mượn trả",
+        actions = "Index",
+        area = "QuanLyDonMuonTra",
+        controller = "DonMuonTra",
+        isActive = pathName[1] == "order" ? "active" : ""
+       },
+       new Sidebar()
+       {
+        name = "Lịch sử mượn trả sách",
+        actions = "Index",
+        area = "QuanLyLichSuMuonTra",
+        controller = "LichSu",
+        isActive = pathName[1] == "lich-su" ? "active" : ""
+       },
+       new Sidebar()
+       {
+        name = "Quản lý phiếu mượn trả",
+        actions = "Index",
+        area = "QuanLyPhieuMuonTra",
+        controller = "PhieuMuonTra",
+        isActive = pathName[1] == "quan-ly-phieu-muon-tra" ? "active" : ""
+       },
     };
   }
     <div class="bg-white py-2 collapse-inner rounded">

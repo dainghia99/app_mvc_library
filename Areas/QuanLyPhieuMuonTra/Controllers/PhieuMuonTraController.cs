@@ -37,6 +37,7 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
             }
 
             var phieuMuonTra = await _context.PhieuMuonTras
+                .Include(x => x.sach)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (phieuMuonTra == null)
             {
@@ -62,6 +63,7 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id, [Bind("Name,Lop,MaSinhVien,NgayTra")] PhieuMuonTra phieuMuonTra)
         {
+
             if (ModelState.IsValid)
             {
                 var sachnew = await _context.Sachs.FirstOrDefaultAsync(x => x.Id == id);
@@ -70,13 +72,6 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
                 phieuMuonTra.TrangThai = false;
                 phieuMuonTra.sach = sachnew;
                 _context.Add(phieuMuonTra);
-
-                // _context.Add(new Order(){
-                //     PhieuMuonTra = new List<PhieuMuonTra>()
-                //     {
-                //         phieuMuonTra
-                //     }
-                // });
 
                 _context.Orders.Add(new Order() {
                     PhieuMuonTra = new List<PhieuMuonTra>()

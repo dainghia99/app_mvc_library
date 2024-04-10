@@ -29,16 +29,22 @@
             @Html.DisplayFor(model => model.MaSinhVien)
         </dd>
         <dt class = "col-sm-2">
+            Sách mượn
+        </dt>
+        <dd class = "col-sm-10">
+            @{
+                var sachMuon = Model?.sach?.TenSach;
+            }
+            <span>@sachMuon</span>
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TrangThai)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TrangThai)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
+            @{
+                var trangThai = Model.TrangThai == true ? "Đã xác thực" : "Chưa xác thực";
+            }
+            <span>@trangThai</span>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.NgayMuon)
@@ -51,12 +57,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.NgayTra)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NgayTaoPhieu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NgayTaoPhieu)
         </dd>
     </dl>
 </div>

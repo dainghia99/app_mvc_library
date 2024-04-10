@@ -66,6 +66,7 @@ namespace appmvclibrary.Areas.QuanLyDonMuonTra.Controllers
                         .FirstOrDefault(x => x.Id == id);
             if (phieuMuonTra != null)
             {   
+                phieuMuonTra.sach.Quantity = phieuMuonTra.sach.Quantity - 1;
                 phieuMuonTra.TrangThai = true;
                 var lichSuMuonTra = new LichSuMuonTra()
                 {

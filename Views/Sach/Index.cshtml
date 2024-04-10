@@ -25,7 +25,7 @@
                     </h6>
                     <h6>Giá: @Math.Floor(Model.Gia).ToString() VND</h6>
                     <hr>
-                    <a href="" class="btn btn-primary">Mượn sách</a>
+                    <a asp-action="Create" asp-controller="PhieuMuonTra" asp-area="QuanLyPhieuMuonTra" asp-route-id="@Model.Id" class="btn btn-primary">Mượn sách</a>
                     <a asp-action="Index" asp-area="" asp-controller="Home" class="">Quay lại trang chủ</a>
                     <p class="my-4">@Model.MoTaNgan
                     </p>

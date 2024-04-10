@@ -1,15 +1,12 @@
 @model IEnumerable<appmvclibrary.Models.LichSuMuonTra>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lịch sử mượn trả";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -22,7 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Lop)
             </th>
-            <th></th>
+            <th>
+                Sách mượn
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -38,9 +37,15 @@
                 @Html.DisplayFor(modelItem => item.Lop)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @{
+                    var sachMuons = item.PhieuMuonTras.Select(x => x.sach.TenSach);
+                }
+                @string.Join(", ", sachMuons);
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Chỉnh sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Xoá</a>
             </td>
         </tr>
 }

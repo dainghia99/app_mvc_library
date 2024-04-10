@@ -57,12 +57,24 @@
                     @p.NgayTra
                 </td>
                 <td>
-                    <form asp-action="Create" asp-route-id="@p.Id">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <input type="submit" value="Xác thực" class="btn btn-primary" />
-                        </div>
-                    </form>
+                    @if (p.TrangThai == false)
+                    {
+                         <form asp-action="Create" asp-route-id="@p.Id">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <input type="submit" value="Xác thực" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    } 
+                    @* else {
+                        <form asp-action="Create" asp-route-id="@p.Id">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <input type="submit" value="Xác thực trả sách" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    } *@
+                   
                     @* <a asp-action="Delete" asp-route-id="@item.Id">Xoá</a> *@
                 </td>
             </tr>

@@ -224,7 +224,7 @@
                                     <div class="d-flex flex-column p-4">
                                         <a asp-action="Index" asp-area="" asp-controller="Sach" asp-route-slug="@item.Slug" class="h4">@item.TenSach</a>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <a asp-action="" class="btn btn-primary">Đặt sách</a>
+                                            <a asp-action="Create" asp-controller="PhieuMuonTra" asp-area="QuanLyPhieuMuonTra" asp-route-id="@item.Id" class="btn btn-primary">Mượn sách</a>
                                             <a asp-action="Index" asp-area="" asp-controller="Sach" asp-route-slug="@item.Slug">Thông tin chi tiết</a>
                                         </div>
                                     </div>
@@ -259,7 +259,7 @@
                                             <div class="d-flex flex-column p-4">
                                                 <a asp-action="Index" asp-area="" asp-controller="Sach" asp-route-slug="@item.Slug" class="h4">@item.TenSach</a>
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <a class="btn btn-primary" href="">Mượn sách</a>
+                                                    <a class="btn btn-primary" asp-action="Create" asp-controller="PhieuMuonTra" asp-area="QuanLyPhieuMuonTra" asp-route-id="@item.Id">Mượn sách</a>
                                                     <a asp-action="Index" asp-area="" asp-controller="Sach" asp-route-slug="@item.Slug">Thông tin chi tiết</a>
                                                 </div>
                                             </div>
@@ -283,7 +283,7 @@
                                                 <img src="@items.Images[0].ImageUrl" class="img-fluid w-100 rounded" alt="@items.TenSach">
                                                 <div class="lifestyle-content">
                                                     <div class="mt-auto d-flex justify-content-between">
-                                                        <a href="" class="btn btn-primary">Đặt sách</a>
+                                                        <a asp-action="Create" asp-controller="PhieuMuonTra" asp-area="QuanLyPhieuMuonTra" asp-route-id="@items.Id" class="btn btn-primary">Mượn sách</a>
                                                         <a asp-action="Index" asp-area="" asp-controller="Sach" asp-route-slug="@items.Slug">Thông tin chi tiết</a>
                                                     </div>
                                                 </div>

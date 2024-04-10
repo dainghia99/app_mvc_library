@@ -10,13 +10,20 @@ namespace appmvclibrary.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Tên sinh viên")]
         public string Name { get; set; }
+        [Display(Name = "Lớp")]
         public string Lop { get; set; }
+        [Display(Name = "Mã sinh viên")]
         public string MaSinhVien { get; set; }
+        [Display(Name = "Trạng thái")]
         public bool TrangThai { get; set; }
         public int Quantity { get; set; }
+        [Display(Name = "Sách mượn")]
         public Sach? sach { get; set; }
+        [Display(Name = "Ngày mượn")]
         public DateTime NgayMuon { get; set; }
+        [Display(Name = "Ngày đến hạn")]
         public DateTime? NgayTra { get; set; }
         public DateTime NgayTaoPhieu { get; set; }
     }

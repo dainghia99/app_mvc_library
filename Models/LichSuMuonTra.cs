@@ -10,10 +10,12 @@ namespace appmvclibrary.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Họ tên sinh viên")]
         public string Name { get; set; }
+        [Display(Name = "Mã sinh viên")]
         public string MaSinhVien { get; set; }
+        [Display(Name = "Lớp")]
         public string Lop { get; set; }
-        
         public List<PhieuMuonTra> PhieuMuonTras { get; set; }
 
     }

@@ -27,12 +27,8 @@
                 @Html.DisplayNameFor(model => model.NgayMuon)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NgayTra)
+                Ngày đến hạn
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayTaoPhieu)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -48,16 +44,16 @@
                 @Html.DisplayFor(modelItem => item.MaSinhVien)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TrangThai)
+                @{
+                    var hienThi = item.TrangThai == true ? "Đã xác thực" : "Chưa xác thực";
+                }
+                <span>@hienThi</span>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NgayMuon)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NgayTra)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayTaoPhieu)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
