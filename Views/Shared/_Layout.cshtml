@@ -62,11 +62,10 @@
                         </div>
                     </div>
                     <div class="top-link flex-lg-wrap">
-                        @* <div class="d-flex justify-content-center align-items-center">
-                            <partial name="_ViewAdmin" />
+                        <div class="d-flex justify-content-center align-items-center">
+                            @* <partial name="_ViewAdmin" /> *@
                             <partial name="_LoginPartial" />
-                        </div> *@
-                        Đăng nhập đăng ký ở đây
+                        </div>
                     </div>
                 </div>
             </div>
@@ -103,7 +102,7 @@
 
                                         async Task RenderUi(Category category, int level) {
 
-                                            var mr = level == 0 ? 0 + "px" : level + 10 + "px";
+                                            var mr = level == 0 ? 0 + "px" : level + 20 + "px";
                                             <a href="#" style="padding-left: @mr;" class="dropdown-item">@category.Title</a>
 
                                             if (category.CategoryChildren?.Count > 0) 

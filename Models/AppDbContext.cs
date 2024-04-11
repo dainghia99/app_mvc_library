@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using appmvclibrary.Models.User;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace appmvclibrary.Models
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext (DbContextOptions<AppDbContext> options) : base (options) { }
 
@@ -14,12 +16,12 @@ namespace appmvclibrary.Models
 
             base.OnModelCreating (builder);
             // Bỏ tiền tố AspNet của các bảng: mặc định
-            // foreach (var entityType in builder.Model.GetEntityTypes ()) {
-            //     var tableName = entityType.GetTableName ();
-            //     if (tableName.StartsWith ("AspNet")) {
-            //         entityType.SetTableName (tableName.Substring (6));
-            //     }
-            // }
+            foreach (var entityType in builder.Model.GetEntityTypes ()) {
+                var tableName = entityType.GetTableName ();
+                if (tableName.StartsWith ("AspNet")) {
+                    entityType.SetTableName (tableName.Substring (6));
+                }
+            }
 
             builder.Entity<SachCategory>(entity => {
                 entity.HasKey(x => new {x.SachId, x.CategoryId});

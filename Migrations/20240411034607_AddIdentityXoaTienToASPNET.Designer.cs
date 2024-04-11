@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using appmvclibrary.Models;
 
@@ -11,9 +12,11 @@ using appmvclibrary.Models;
 namespace appmvclibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240411034607_AddIdentityXoaTienToASPNET")]
+    partial class AddIdentityXoaTienToASPNET
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -462,11 +465,12 @@ namespace appmvclibrary.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HomeAdress")
+                        .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar");
+
+                    b.Property<string>("HomeAdress")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Khoa")
                         .HasColumnType("nvarchar(max)");
