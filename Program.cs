@@ -93,6 +93,14 @@ builder.Services.ConfigureApplicationCookie(options => {
 
 builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
 
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("PhanQuyenTruyCapAdmin", option => {
+        option.RequireAuthenticatedUser();
+        option.RequireRole("Administrator", "ThuThu");
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

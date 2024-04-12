@@ -57,7 +57,7 @@ namespace appmvclibrary.Areas.Administrator.Controllers
                 await _userManager.CreateAsync(userAdmin, "admin12345");
                 await _userManager.AddToRoleAsync(userAdmin, RoleName.Administrator);
             }   
-            StatusMessage = "Vừa seed database";
+            StatusMessage = "Đã tạo thành công tài khoản administrator với thông tin tài khoản là user: admin passwword: admin12345";
             return RedirectToAction("Index", "Home");
         }
     }
