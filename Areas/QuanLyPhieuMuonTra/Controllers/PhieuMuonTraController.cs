@@ -65,6 +65,40 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Route("/tra-sach/{id?}")]
+        [Authorize]
+         public async Task<IActionResult> TraSach(int? id)
+        {
+            var user = await _userManager.GetUserAsync(this.User);
+            ViewBag.Sach = _context.Sachs.FirstOrDefault(x => x.Id == id);
+            ViewBag.User = user;
+            return View();
+        }
+
+        [HttpPost]
+        [Route("/tra-sach/{id?}")]
+        [Authorize]
+         public async Task<IActionResult> TraSach(int? id,  [Bind("Name,Lop,MaSinhVien")] PhieuMuonTra phieuMuonTra)
+        {
+            if (ModelState.IsValid)
+            {
+                var sachM = await _context.Sachs.FirstOrDefaultAsync(x => x.Id == id);
+                var lichsu = await _context.LichSuMuonTras
+                          .Include(x => x.sach)
+                          .FirstOrDefaultAsync(x => x.sach.Id == id);
+
+                    sachM.Quantity = sachM.Quantity + 1;
+                    _context.Sachs.Update(sachM);
+                    lichsu.TrangThai = false;
+                    _context.LichSuMuonTras.Update(lichsu);
+                    await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+            
+            return View();
+        }
+
         // POST: QuanLyPhieuMuonTra/PhieuMuonTra/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

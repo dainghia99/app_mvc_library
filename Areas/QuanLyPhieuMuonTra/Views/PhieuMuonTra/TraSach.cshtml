@@ -1,0 +1,74 @@
+@model appmvclibrary.Models.PhieuMuonTra
+
+@{
+    ViewData["Title"] = "Phiếu mượn trả";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = ViewBag.User;
+    var fullName = user?.FullName;
+    var lop = user?.Lop;
+    var maSinhVien = user?.StudentCode;
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" asp-controller="PhieuMuonTra" asp-area="QuanLyPhieuMuonTra" asp-route-id="@ViewBag.Sach.Id">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                @{
+                    if (user.FullName != null)
+                    {
+                        <input asp-for="Name" value="@fullName" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    } else
+                    {
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    }
+                }
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="Lop" class="control-label"></label>
+                @{
+                    if (user.Lop != null)
+                    {
+                         <input asp-for="Lop" value="@lop" class="form-control" />
+                        <span asp-validation-for="Lop" class="text-danger"></span>
+                    } else
+                    {
+                        <input asp-for="Lop" class="form-control" />
+                        <span asp-validation-for="Lop" class="text-danger"></span>
+                    }
+                }
+               
+            </div>
+            <div class="form-group">
+                <label asp-for="MaSinhVien" class="control-label"></label>
+                @{
+                    if (user.StudentCode != null)
+                    {
+                         <input asp-for="MaSinhVien" value="@maSinhVien" class="form-control" />
+                        <span asp-validation-for="MaSinhVien" class="text-danger"></span>
+                    } else
+                    {
+                          <input asp-for="MaSinhVien" class="form-control" />
+                         <span asp-validation-for="MaSinhVien" class="text-danger"></span>
+                    }
+                }
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="sach" class="control-label"></label>
+                <input asp-for="sach" value="@ViewBag.Sach.TenSach" class="form-control" />
+                <span asp-validation-for="sach" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Trả sách" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+

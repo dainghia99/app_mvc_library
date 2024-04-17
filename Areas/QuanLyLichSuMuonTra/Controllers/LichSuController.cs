@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using appmvclibrary.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace appmvclibrary.Areas.QuanLyLichSuMuonTra.Controllers
 {
@@ -29,16 +30,30 @@ namespace appmvclibrary.Areas.QuanLyLichSuMuonTra.Controllers
             
             return View(lichSuMuonTras);
         }
-        [HttpGet]
-        public async Task<IActionResult> SacDaMuon()
+
+
+
+         
+        [HttpGet]   
+        [Authorize]
+        public async Task<IActionResult> SachDaMuon()
         {
-            var lichSuMuonTras = await _context.LichSuMuonTras
-                                 .Include(x => x.sach)
-                                 .ToListAsync();
+            var lichsu = await _context.LichSuMuonTras.Include(x => x.sach).Where(x => x.TrangThai == true).ToListAsync();
             
-            return View(lichSuMuonTras);
+            return View(lichsu);
         }
 
+
+        // [HttpPost]   
+        // [Authorize]
+        // public async Task<IActionResult> TraSach(int? id)
+        // {
+        //     var lichSuMuonTras = await _context.LichSuMuonTras
+        //                          .Include(x => x.sach)
+        //                          .ToListAsync();
+            
+        //     return View(lichSuMuonTras);
+        // }
         // GET: QuanLyLichSuMuonTra/LichSu/Details/5
         public async Task<IActionResult> Details(int? id)
         {

@@ -1,0 +1,51 @@
+@model IEnumerable<appmvclibrary.Models.LichSuMuonTra>
+
+@{
+    ViewData["Title"] = "Sách đã mượn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaSinhVien)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lop)
+            </th>
+            <th>
+                Sách mượn
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        @if (item.TrangThai == true)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaSinhVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lop)
+                </td>
+                <td>
+                    @item.sach.TenSach
+                </td>
+                <td>
+                    <a asp-action="TraSach" asp-controller="PhieuMuonTra" asp-area="QuanLyPhieuMuonTra" asp-route-id="@item.sach.Id" class="btn btn-primary">Trả sách</a>
+                </td>
+            </tr>
+        }
+}
+    </tbody>
+</table>
