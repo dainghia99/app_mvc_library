@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Phiếu mượn trả";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = ViewBag.User;
+    var fullName = user?.FullName;
+    var lop = user?.Lop;
+    var maSinhVien = user?.StudentCode;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -13,18 +17,48 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                @{
+                    if (user.FullName != null)
+                    {
+                        <input asp-for="Name" value="@fullName" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    } else
+                    {
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    }
+                }
+                
             </div>
             <div class="form-group">
                 <label asp-for="Lop" class="control-label"></label>
-                <input asp-for="Lop" class="form-control" />
-                <span asp-validation-for="Lop" class="text-danger"></span>
+                @{
+                    if (user.Lop != null)
+                    {
+                         <input asp-for="Lop" value="@lop" class="form-control" />
+                        <span asp-validation-for="Lop" class="text-danger"></span>
+                    } else
+                    {
+                        <input asp-for="Lop" class="form-control" />
+                        <span asp-validation-for="Lop" class="text-danger"></span>
+                    }
+                }
+               
             </div>
             <div class="form-group">
                 <label asp-for="MaSinhVien" class="control-label"></label>
-                <input asp-for="MaSinhVien" class="form-control" />
-                <span asp-validation-for="MaSinhVien" class="text-danger"></span>
+                @{
+                    if (user.StudentCode != null)
+                    {
+                         <input asp-for="MaSinhVien" value="@maSinhVien" class="form-control" />
+                        <span asp-validation-for="MaSinhVien" class="text-danger"></span>
+                    } else
+                    {
+                          <input asp-for="MaSinhVien" class="form-control" />
+                         <span asp-validation-for="MaSinhVien" class="text-danger"></span>
+                    }
+                }
+                
             </div>
             <div class="form-group">
                 <label asp-for="NgayTra" class="control-label"></label>

@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using appmvclibrary.Models;
+using Microsoft.AspNetCore.Identity;
+using appmvclibrary.Models.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
 {
@@ -14,11 +17,16 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
     public class PhieuMuonTraController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public PhieuMuonTraController(AppDbContext context)
+        public PhieuMuonTraController(AppDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
+        [TempData]
+        public string StatusMessage {set; get;}
 
         // GET: QuanLyPhieuMuonTra/PhieuMuonTra
         [Route("/quan-ly-phieu-muon-tra/[action]/{id?}")]
@@ -49,9 +57,11 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
 
         // GET: QuanLyPhieuMuonTra/PhieuMuonTra/Create
         [Route("/muon-sach/{id?}")]
-        public IActionResult Create(int? id)
+        public async Task<IActionResult> Create(int? id)
         {
+            var user = await _userManager.GetUserAsync(this.User);
             ViewBag.Sach = _context.Sachs.FirstOrDefault(x => x.Id == id);
+            ViewBag.User = user;
             return View();
         }
 
@@ -61,9 +71,15 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
         [Route("/muon-sach/{id?}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(int id, [Bind("Name,Lop,MaSinhVien,NgayTra")] PhieuMuonTra phieuMuonTra)
         {
-
+            var user = await _userManager.GetUserAsync(this.User);
+            if (user.FullName == null || user.Lop == null || user.StudentCode == null)
+            {
+                StatusMessage = "Vui lòng cập nhật thông tin tài khoản để mượn sách";
+                return RedirectToAction("Create", "PhieuMuonTra", new {area = "QuanLyPhieuMuonTra"});
+            }
             if (ModelState.IsValid)
             {
                 var sachnew = await _context.Sachs.FirstOrDefaultAsync(x => x.Id == id);
@@ -71,15 +87,26 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
                 phieuMuonTra.NgayTaoPhieu = DateTime.Now;
                 phieuMuonTra.TrangThai = false;
                 phieuMuonTra.sach = sachnew;
-                _context.Add(phieuMuonTra);
-
-                _context.Orders.Add(new Order() {
-                    PhieuMuonTra = new List<PhieuMuonTra>()
+                var order = new Order();
+                order.PhieuMuonTra = new List<PhieuMuonTra>()
+                {
+                    phieuMuonTra
+                };
+                order.LichSuMuonTra = new LichSuMuonTra()
+                {
+                    Name = phieuMuonTra.Name,
+                    MaSinhVien = phieuMuonTra.MaSinhVien,
+                    Lop = phieuMuonTra.Lop,
+                    sach = sachnew,
+                    TrangThai = false, // Chưa mượn
+                    Orders = new List<Order>()
                     {
-                        phieuMuonTra
+                        order
                     }
-                });
-
+                };
+                phieuMuonTra.Order = order;
+                _context.Add(phieuMuonTra);
+                _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home", new { area = "" });
             }

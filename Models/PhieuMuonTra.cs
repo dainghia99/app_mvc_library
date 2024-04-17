@@ -24,7 +24,11 @@ namespace appmvclibrary.Models
         [Display(Name = "Ngày mượn")]
         public DateTime NgayMuon { get; set; }
         [Display(Name = "Ngày đến hạn")]
-        public DateTime? NgayTra { get; set; }
+        [Required(ErrorMessage = "Vui lòng chọn ngày trả sách")]
+        public DateTime NgayTra { get; set; }
         public DateTime NgayTaoPhieu { get; set; }
+
+        public Order? Order { get; set; }
+        
     }
 }

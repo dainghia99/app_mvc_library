@@ -12,8 +12,8 @@ using appmvclibrary.Models;
 namespace appmvclibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240411072235_AddIdentityFix5")]
-    partial class AddIdentityFix5
+    [Migration("20240417103922_fix1")]
+    partial class fix1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -264,6 +264,9 @@ namespace appmvclibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("TrangThai")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("LichSuMuonTras");
@@ -277,7 +280,12 @@ namespace appmvclibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("LichSuMuonTraId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("LichSuMuonTraId");
 
                     b.ToTable("Orders");
                 });
@@ -289,9 +297,6 @@ namespace appmvclibrary.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("LichSuMuonTraId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Lop")
                         .IsRequired()
@@ -311,7 +316,7 @@ namespace appmvclibrary.Migrations
                     b.Property<DateTime>("NgayTaoPhieu")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("NgayTra")
+                    b.Property<DateTime>("NgayTra")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("OrderId")
@@ -327,8 +332,6 @@ namespace appmvclibrary.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LichSuMuonTraId");
 
                     b.HasIndex("OrderId");
 
@@ -597,19 +600,26 @@ namespace appmvclibrary.Migrations
                     b.Navigation("Sach");
                 });
 
-            modelBuilder.Entity("appmvclibrary.Models.PhieuMuonTra", b =>
+            modelBuilder.Entity("appmvclibrary.Models.Order", b =>
                 {
-                    b.HasOne("appmvclibrary.Models.LichSuMuonTra", null)
-                        .WithMany("PhieuMuonTras")
+                    b.HasOne("appmvclibrary.Models.LichSuMuonTra", "LichSuMuonTra")
+                        .WithMany("Orders")
                         .HasForeignKey("LichSuMuonTraId");
 
-                    b.HasOne("appmvclibrary.Models.Order", null)
+                    b.Navigation("LichSuMuonTra");
+                });
+
+            modelBuilder.Entity("appmvclibrary.Models.PhieuMuonTra", b =>
+                {
+                    b.HasOne("appmvclibrary.Models.Order", "Order")
                         .WithMany("PhieuMuonTra")
                         .HasForeignKey("OrderId");
 
                     b.HasOne("appmvclibrary.Models.Sach", "sach")
                         .WithMany()
                         .HasForeignKey("sachId");
+
+                    b.Navigation("Order");
 
                     b.Navigation("sach");
                 });
@@ -661,7 +671,7 @@ namespace appmvclibrary.Migrations
 
             modelBuilder.Entity("appmvclibrary.Models.LichSuMuonTra", b =>
                 {
-                    b.Navigation("PhieuMuonTras");
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("appmvclibrary.Models.Order", b =>

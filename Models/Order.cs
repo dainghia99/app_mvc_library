@@ -10,6 +10,7 @@ namespace appmvclibrary.Models
     {
         [Key]
         public int Id { get; set; }
-        public List<PhieuMuonTra> PhieuMuonTra {set; get;}
+        public List<PhieuMuonTra>? PhieuMuonTra {set; get;}
+        public LichSuMuonTra? LichSuMuonTra { set; get; }
     }
 }

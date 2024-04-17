@@ -1,8 +1,8 @@
 @model IEnumerable<appmvclibrary.Models.LichSuMuonTra>
 
 @{
-    ViewData["Title"] = "Lịch sử mượn trả";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Sách đã mượn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -37,13 +37,10 @@
                 @Html.DisplayFor(modelItem => item.Lop)
             </td>
             <td>
-                
                 @item.sach.TenSach
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Chỉnh sửa</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Xoá</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Trả sách</a>
             </td>
         </tr>
 }

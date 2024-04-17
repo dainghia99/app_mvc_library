@@ -24,10 +24,18 @@ namespace appmvclibrary.Areas.QuanLyLichSuMuonTra.Controllers
         public async Task<IActionResult> Index()
         {
             var lichSuMuonTras = await _context.LichSuMuonTras
-                                 .Include(x => x.PhieuMuonTras)
-                                    .ThenInclude(x => x.sach)
+                                 .Include(x => x.sach)
                                  .ToListAsync();
-                                 
+            
+            return View(lichSuMuonTras);
+        }
+        [HttpGet]
+        public async Task<IActionResult> SacDaMuon()
+        {
+            var lichSuMuonTras = await _context.LichSuMuonTras
+                                 .Include(x => x.sach)
+                                 .ToListAsync();
+            
             return View(lichSuMuonTras);
         }
 
