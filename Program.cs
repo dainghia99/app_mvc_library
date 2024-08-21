@@ -16,17 +16,15 @@ builder.Services.Configure<MailSettings>(mailsetting);
 builder.Services.AddSingleton<IEmailSender, SendMailService>();
 
 // Đăng ký AppDbContext, sử dụng kết nối đến MS SQL Server
-builder.Services.AddDbContext<AppDbContext> (options => {
-    string connectstring = builder.Configuration.GetConnectionString ("DefaultConnection");
-    options.UseSqlServer (connectstring);
-});
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<AppUser, IdentityRole> ()
-    .AddEntityFrameworkStores<AppDbContext> ()
-    .AddDefaultTokenProviders ();
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 // Truy cập IdentityOptions
-builder.Services.Configure<IdentityOptions> (options => {
+builder.Services.Configure<IdentityOptions>(options =>
+{
     // Thiết lập về Password
     options.Password.RequireDigit = false; // Không bắt phải có số
     options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
@@ -36,7 +34,7 @@ builder.Services.Configure<IdentityOptions> (options => {
     options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
 
     // Cấu hình Lockout - khóa user
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes (5); // Khóa 5 phút
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
     options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lầ thì khóa
     options.Lockout.AllowedForNewUsers = true;
 
@@ -53,26 +51,29 @@ builder.Services.Configure<IdentityOptions> (options => {
 });
 
 // Cấu hình Cookie
-builder.Services.ConfigureApplicationCookie (options => {
-    // options.Cookie.HttpOnly = true;  
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);  
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;     // Đánh dấu cookie là Secure
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     options.LoginPath = $"/login/";                                 // Url đến trang đăng nhập
-    options.LogoutPath = $"/logout/";   
+    options.LogoutPath = $"/logout/";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";   // Trang khi User bị cấm truy cập
 });
 builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 {
     // Trên 5 giây truy cập lại sẽ nạp lại thông tin User (Role)
     // SecurityStamp trong bảng User đổi -> nạp lại thông tinn Security
-    options.ValidationInterval = TimeSpan.FromSeconds(5); 
+    options.ValidationInterval = TimeSpan.FromSeconds(5);
 });
 
 
-builder.Services.ConfigureApplicationCookie(options => {
+builder.Services.ConfigureApplicationCookie(options =>
+{
     options.LoginPath = "/login/";
     options.LogoutPath = "/logout/";
     options.AccessDeniedPath = "/khongduoctruycap.html";
-});  
+});
 
 
 // builder.Services.AddAuthentication()
@@ -94,8 +95,10 @@ builder.Services.ConfigureApplicationCookie(options => {
 builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
 
 
-builder.Services.AddAuthorization(options => {
-    options.AddPolicy("PhanQuyenTruyCapAdmin", option => {
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("PhanQuyenTruyCapAdmin", option =>
+    {
         option.RequireAuthenticatedUser();
         option.RequireRole("Administrator", "ThuThu");
     });
