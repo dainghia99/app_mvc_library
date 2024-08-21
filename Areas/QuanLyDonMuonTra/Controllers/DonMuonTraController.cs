@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using appmvclibrary.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace appmvclibrary.Areas.QuanLyDonMuonTra.Controllers
 {
     [Area("QuanLyDonMuonTra")]
     [Route("/order/[action]/{id?}")]
+    [Authorize(Roles = "Administrator, ThuThu")]
+
     public class DonMuonTraController : Controller
     {
         private readonly AppDbContext _context;
@@ -61,7 +64,7 @@ namespace appmvclibrary.Areas.QuanLyDonMuonTra.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id)
         {
-            var order =  await _context.Orders
+            var order = await _context.Orders
                         .Include(x => x.LichSuMuonTra)
                         .FirstOrDefaultAsync(x => x.Id == id);
             var lichSu = await _context.LichSuMuonTras
@@ -91,7 +94,7 @@ namespace appmvclibrary.Areas.QuanLyDonMuonTra.Controllers
             _context.Orders.Remove(order);
             _context.LichSuMuonTras.Update(lichSu);
             await _context.SaveChangesAsync();
-           return RedirectToAction("Index", "DonMuonTra", new {area = "QuanLyDonMuonTra"});
+            return RedirectToAction("Index", "DonMuonTra", new { area = "QuanLyDonMuonTra" });
         }
 
         // GET: QuanLyDonMuonTra/DonMuonTra/Edit/5

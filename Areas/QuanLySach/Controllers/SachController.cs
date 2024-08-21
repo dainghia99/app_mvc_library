@@ -9,11 +9,13 @@ using appmvclibrary.Models;
 using appmvclibrary.Areas.QuanLySach.Models;
 using System.Text;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace appmvclibrary.Areas.QuanLySach.Controllers
 {
     [Area("QuanLySach")]
     [Route("/quan-ly-sach/[action]/{id?}")]
+    [Authorize(Roles = "Administrator, ThuThu")]
     public class SachController : Controller
     {
         private readonly AppDbContext _context;
@@ -23,7 +25,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
-           
+
         }
 
         // GET: QuanLySach/Sach
@@ -75,7 +77,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+
                 sach.Created = DateTime.Now;
                 sach.UpdatAt = DateTime.Now;
                 sach.State = 1;
@@ -83,11 +85,12 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                 var slug = val.Replace(" ", "-");
                 slug = slug.ToLower();
                 sach.Slug = slug;
-                if (sach.CategoryIds != null) 
+                if (sach.CategoryIds != null)
                 {
-                    foreach (var item in sach.CategoryIds) 
+                    foreach (var item in sach.CategoryIds)
                     {
-                        _context.Add(new SachCategory() {
+                        _context.Add(new SachCategory()
+                        {
                             Sach = sach,
                             CategoryId = item
                         });
@@ -134,7 +137,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                 return NotFound();
             }
 
-            var postEdit = new ThemMoiSachModel() 
+            var postEdit = new ThemMoiSachModel()
             {
                 Id = sach.Id,
                 TenSach = sach.TenSach,
@@ -146,7 +149,7 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                 Slug = sach.Slug,
                 CategoryIds = sach.SachCategories.Select(x => x.CategoryId).ToArray()
             };
-            
+
 
             var theLoaiSach = _context.Categories.ToList();
             ViewBag.DanhSachTheLoai = new MultiSelectList(theLoaiSach, "Id", "Title");
@@ -167,7 +170,8 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
             }
 
             var theLoaiSach = _context.Categories.ToList();
-            theLoaiSach.Insert(0, new Category(){
+            theLoaiSach.Insert(0, new Category()
+            {
                 Id = -1,
                 Title = "Không có thể loại",
             });
@@ -203,25 +207,26 @@ namespace appmvclibrary.Areas.QuanLySach.Controllers
                     sachUpdate.Slug = slug;
                     sachUpdate.Created = DateTime.Now;
                     sachUpdate.UpdatAt = DateTime.Now;
-                    
-                    if (sach.CategoryIds == null) sach.CategoryIds = new int[] {};
+
+                    if (sach.CategoryIds == null) sach.CategoryIds = new int[] { };
 
                     var oldCateIds = sachUpdate.SachCategories.Select(x => x.CategoryId).ToArray();
                     var newCateIds = sach.CategoryIds;
 
                     var removeCateIds = from sachCate in sachUpdate.SachCategories
-                                            where (!newCateIds.Contains(sachCate.CategoryId))
-                                            select sachCate;
+                                        where (!newCateIds.Contains(sachCate.CategoryId))
+                                        select sachCate;
 
                     _context.SachCategories.RemoveRange(removeCateIds);
-                    
+
                     var addCateIds = from item in newCateIds
-                                    where !oldCateIds.Contains(item)
-                                    select item;
+                                     where !oldCateIds.Contains(item)
+                                     select item;
 
                     foreach (var item in addCateIds)
                     {
-                        _context.SachCategories.Add(new SachCategory() {
+                        _context.SachCategories.Add(new SachCategory()
+                        {
                             Sach = sachUpdate,
                             CategoryId = item
                         });

@@ -8,11 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using appmvclibrary.Models;
 using System.Text;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
 {
     [Area("QuanLyDanhMuc")]
     [Route("/quan-ly-danh-muc-sach/[action]/{id?}")]
+    [Authorize(Roles = "Administrator, ThuThu")]
     public class CategoryController : Controller
     {
         private readonly AppDbContext _context;
@@ -52,7 +54,8 @@ namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
         public IActionResult Create()
         {
             var categories = _context.Categories.ToList();
-            categories.Insert(0, new Category(){
+            categories.Insert(0, new Category()
+            {
                 Id = -1,
                 Title = "Không có danh mục cha"
             });
@@ -79,7 +82,8 @@ namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
                 return RedirectToAction(nameof(Index));
             }
             var categories = _context.Categories.ToList();
-            categories.Insert(0, new Category(){
+            categories.Insert(0, new Category()
+            {
                 Id = -1,
                 Title = "Không có danh mục cha"
             });
@@ -102,7 +106,8 @@ namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
             }
 
             var categories = _context.Categories.ToList();
-            categories.Insert(0, new Category(){
+            categories.Insert(0, new Category()
+            {
                 Id = -1,
                 Title = "Không có danh mục cha"
             });
@@ -129,9 +134,9 @@ namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
 
             if (ModelState.IsValid && category.ParentCategoryId != category.Id)
             {
-                try 
+                try
                 {
-                    
+
                     if (category.ParentCategoryId == -1) category.ParentCategoryId = null;
                     var val = RemoveDiacritics(category.Title);
                     var slug = val.Replace(" ", "-");
@@ -183,10 +188,10 @@ namespace appmvclibrary.Areas.QuanLyDanhMuc.Controllers
         {
             var category = await _context.Categories
                             .Include(c => c.CategoryChildren)
-                            .FirstOrDefaultAsync(m => m.Id == id);  
+                            .FirstOrDefaultAsync(m => m.Id == id);
             if (category != null)
             {
-                foreach (var childrelCate in category.CategoryChildren) 
+                foreach (var childrelCate in category.CategoryChildren)
                 {
                     childrelCate.ParentCategoryId = category.ParentCategoryId;
                 }

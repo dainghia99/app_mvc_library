@@ -13,7 +13,9 @@ using Microsoft.AspNetCore.Authorization;
 namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
 {
     [Area("QuanLyPhieuMuonTra")]
-    // [Route("/quan-ly-phieu-muon-tra/[action]/{id?}")]
+    [Route("/quan-ly-phieu-muon-tra/[action]/{id?}")]
+    [Authorize(Roles = "Administrator, ThuThu")]
+
     public class PhieuMuonTraController : Controller
     {
         private readonly AppDbContext _context;
@@ -26,7 +28,7 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
         }
 
         [TempData]
-        public string StatusMessage {set; get;}
+        public string StatusMessage { set; get; }
 
         // GET: QuanLyPhieuMuonTra/PhieuMuonTra
         [Route("/quan-ly-phieu-muon-tra/[action]/{id?}")]
@@ -68,7 +70,7 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
         [HttpGet]
         [Route("/tra-sach/{id?}")]
         [Authorize]
-         public async Task<IActionResult> TraSach(int? id)
+        public async Task<IActionResult> TraSach(int? id)
         {
             var user = await _userManager.GetUserAsync(this.User);
             ViewBag.Sach = _context.Sachs.FirstOrDefault(x => x.Id == id);
@@ -79,7 +81,7 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
         [HttpPost]
         [Route("/tra-sach/{id?}")]
         [Authorize]
-         public async Task<IActionResult> TraSach(int? id,  [Bind("Name,Lop,MaSinhVien")] PhieuMuonTra phieuMuonTra)
+        public async Task<IActionResult> TraSach(int? id, [Bind("Name,Lop,MaSinhVien")] PhieuMuonTra phieuMuonTra)
         {
             if (ModelState.IsValid)
             {
@@ -88,14 +90,14 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
                           .Include(x => x.sach)
                           .FirstOrDefaultAsync(x => x.sach.Id == id);
 
-                    sachM.Quantity = sachM.Quantity + 1;
-                    _context.Sachs.Update(sachM);
-                    lichsu.TrangThai = false;
-                    _context.LichSuMuonTras.Update(lichsu);
-                    await _context.SaveChangesAsync();
+                sachM.Quantity = sachM.Quantity + 1;
+                _context.Sachs.Update(sachM);
+                lichsu.TrangThai = false;
+                _context.LichSuMuonTras.Update(lichsu);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home", new { area = "" });
             }
-            
+
             return View();
         }
 
@@ -112,7 +114,7 @@ namespace appmvclibrary.Areas.QuanLyPhieuMuonTra.Controllers
             if (user.FullName == null || user.Lop == null || user.StudentCode == null)
             {
                 StatusMessage = "Vui lòng cập nhật thông tin tài khoản để mượn sách";
-                return RedirectToAction("Create", "PhieuMuonTra", new {area = "QuanLyPhieuMuonTra"});
+                return RedirectToAction("Create", "PhieuMuonTra", new { area = "QuanLyPhieuMuonTra" });
             }
             if (ModelState.IsValid)
             {

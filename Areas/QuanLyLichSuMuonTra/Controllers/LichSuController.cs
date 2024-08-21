@@ -12,6 +12,8 @@ namespace appmvclibrary.Areas.QuanLyLichSuMuonTra.Controllers
 {
     [Area("QuanLyLichSuMuonTra")]
     [Route("/lich-su/[action]/{id?}")]
+    [Authorize(Roles = "Administrator, ThuThu")]
+
     public class LichSuController : Controller
     {
         private readonly AppDbContext _context;
@@ -27,19 +29,19 @@ namespace appmvclibrary.Areas.QuanLyLichSuMuonTra.Controllers
             var lichSuMuonTras = await _context.LichSuMuonTras
                                  .Include(x => x.sach)
                                  .ToListAsync();
-            
+
             return View(lichSuMuonTras);
         }
 
 
 
-         
-        [HttpGet]   
+
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> SachDaMuon()
         {
             var lichsu = await _context.LichSuMuonTras.Include(x => x.sach).Where(x => x.TrangThai == true).ToListAsync();
-            
+
             return View(lichsu);
         }
 
@@ -51,7 +53,7 @@ namespace appmvclibrary.Areas.QuanLyLichSuMuonTra.Controllers
         //     var lichSuMuonTras = await _context.LichSuMuonTras
         //                          .Include(x => x.sach)
         //                          .ToListAsync();
-            
+
         //     return View(lichSuMuonTras);
         // }
         // GET: QuanLyLichSuMuonTra/LichSu/Details/5
