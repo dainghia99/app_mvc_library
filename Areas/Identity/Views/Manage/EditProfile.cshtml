@@ -10,7 +10,7 @@
 <div class="row">
     <div class="col-md-6">
         <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserName"></label>
                 <input asp-for="UserName" class="form-control" disabled />
@@ -28,6 +28,26 @@
                 <label asp-for="HomeAdress"></label>
                 <textarea asp-for="HomeAdress" class="form-control"></textarea>
                 <span asp-validation-for="HomeAdress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" class="form-control"></input>
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StudentCode"></label>
+                <input asp-for="StudentCode" class="form-control"></input>
+                <span asp-validation-for="StudentCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Khoa"></label>
+                <input asp-for="Khoa" class="form-control"></input>
+                <span asp-validation-for="Khoa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lop"></label>
+                <input asp-for="Lop" class="form-control"></input>
+                <span asp-validation-for="Lop" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BirthDate"></label>

@@ -9,11 +9,13 @@ using appmvclibrary.Models;
 using Org.BouncyCastle.Asn1.X509;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using appmvclibrary.Areas.QuanLyTacGia.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
 {
     [Area("QuanLyTacGia")]
     [Route("/quan-ly-tac-gia/[action]/{id?}")]
+    [Authorize(Roles = "Administrator, ThuThu")]
     public class TacGiaController : Controller
     {
         private readonly AppDbContext _context;
@@ -60,7 +62,7 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
             var sachs = _context.Sachs.ToList();
             ViewBag.DanhSachSachs = new SelectList(sachs, "Id", "TenSach");
             return View();
-        }   
+        }
 
         // POST: QuanLyTacGia/TacGia/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -76,9 +78,10 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
 
                 if (tacGia.SachIds != null)
                 {
-                    foreach (var item in tacGia.SachIds) 
+                    foreach (var item in tacGia.SachIds)
                     {
-                        _context.Add(new TacGiaSach() {
+                        _context.Add(new TacGiaSach()
+                        {
                             TacGia = tacGia,
                             SachId = item
                         });
@@ -151,7 +154,7 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
                     {
                         return NotFound();
                     }
-                    
+
                     tacGiaUpdate.Id = tacGia.Id;
                     tacGiaUpdate.Name = tacGia.Name;
                     tacGiaUpdate.NgaySinh = tacGia.NgaySinh;
@@ -159,30 +162,31 @@ namespace appmvclibrary.Areas.QuanLyTacGia.Controllers
                     tacGiaUpdate.CreatedAt = tacGia.CreatedAt;
                     tacGiaUpdate.UpdatedAt = tacGia.UpdatedAt;
 
-                    if (tacGia.SachIds == null) tacGia.SachIds = new int[] {};
+                    if (tacGia.SachIds == null) tacGia.SachIds = new int[] { };
 
                     var oldSacIds = tacGiaUpdate.TacGiaSach.Select(x => x.SachId).ToArray();
                     var newSacIds = tacGia.SachIds;
 
                     var removeSachCu = from sach in tacGiaUpdate.TacGiaSach
-                                        where (!newSacIds.Contains(sach.SachId))
-                                        select sach;
+                                       where (!newSacIds.Contains(sach.SachId))
+                                       select sach;
 
                     _context.TacGiaSachs.RemoveRange(removeSachCu);
 
                     var addSachIds = from sachId in newSacIds
-                                    where !oldSacIds.Contains(sachId)
-                                    select sachId;
+                                     where !oldSacIds.Contains(sachId)
+                                     select sachId;
 
                     foreach (var addSachId in addSachIds)
                     {
-                        _context.TacGiaSachs.Add(new TacGiaSach() {
+                        _context.TacGiaSachs.Add(new TacGiaSach()
+                        {
                             TacGia = tacGiaUpdate,
                             SachId = addSachId
                         });
                     }
 
-                    
+
 
                     _context.Update(tacGiaUpdate);
                     await _context.SaveChangesAsync();

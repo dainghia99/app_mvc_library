@@ -1,0 +1,16 @@
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorization
+
+@{
+    var result = await authorization.AuthorizeAsync(this.User, "PhanQuyenTruyCapAdmin");
+    
+}
+
+@if (result.Succeeded)
+{
+    <a class="text-center btn btn-primary btn-small" asp-area="Administrator" asp-controller="Home" asp-action="Index">Administrator</a>
+}
+
+@* @if (this.User.IsInRole("Administrator") || this.User.IsInRole("ThuThu")) {
+    <a class="text-center" asp-area="Administrator" asp-controller="Home" asp-action="Index">Đến trang Admin</a>
+} *@

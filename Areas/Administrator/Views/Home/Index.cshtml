@@ -2,5 +2,5 @@
     ViewData["Title"] = "Trang quản trị";
     Layout = "/Views/Shared/_LayoutAdmin.cshtml";
 }
-
-<a>Tạo tài khoản Admin</a>
+<partial name="_StatusMessage" />
+<a class="btn btn-danger mt-5" asp-area="Administrator" asp-action="SeedData" asp-controller="Home">Tạo tài khoản Admin</a>

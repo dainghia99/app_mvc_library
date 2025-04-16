@@ -66,8 +66,13 @@ namespace App.Areas.Identity.Controllers
                     BirthDate = user.BirthDate,
                     HomeAdress = user.HomeAdress,
                     UserName = user.UserName,
+                    FullName = user.FullName,
                     UserEmail = user.Email,
                     PhoneNumber = user.PhoneNumber,
+                    StudentCode = user.StudentCode,
+                    Khoa = user.Khoa,
+                    Lop = user.Lop
+
                 }
             };
             return View(model);
@@ -376,15 +381,20 @@ namespace App.Areas.Identity.Controllers
         {
             var user = await GetCurrentUserAsync();
             
-            var model = new EditExtraProfileModel()
-            {
-                BirthDate = user.BirthDate,
-                HomeAdress = user.HomeAdress,
-                UserName = user.UserName,
-                UserEmail = user.Email,
-                PhoneNumber = user.PhoneNumber,
-            };
-            return View(model);
+            
+                var model = new EditExtraProfileModel()
+                {
+                    BirthDate = user.BirthDate,
+                    HomeAdress = user.HomeAdress,
+                    UserName = user.UserName,
+                    UserEmail = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    FullName = user.FullName,
+                    StudentCode = user.StudentCode,
+                    Khoa = user.Khoa,
+                    Lop = user.Lop
+                };
+                return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> EditProfileAsync(EditExtraProfileModel model)
@@ -393,6 +403,10 @@ namespace App.Areas.Identity.Controllers
 
             user.HomeAdress = model.HomeAdress;
             user.BirthDate = model.BirthDate;
+            user.StudentCode = model.StudentCode;
+            user.FullName = model.FullName;
+            user.Lop = model.Lop;
+            user.Khoa = model.Khoa;
             await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);

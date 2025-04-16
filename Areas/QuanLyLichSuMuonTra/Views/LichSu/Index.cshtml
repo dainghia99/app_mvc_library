@@ -37,10 +37,8 @@
                 @Html.DisplayFor(modelItem => item.Lop)
             </td>
             <td>
-                @{
-                    var sachMuons = item.PhieuMuonTras.Select(x => x.sach.TenSach);
-                }
-                @string.Join(", ", sachMuons);
+                
+                @item.sach.TenSach
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Chỉnh sửa</a> |

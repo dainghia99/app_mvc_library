@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using appmvclibrary.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace appmvclibrary.Areas.QuanLyDonMuonTra.Controllers
 {
     [Area("QuanLyDonMuonTra")]
     [Route("/order/[action]/{id?}")]
+    [Authorize(Roles = "Administrator, ThuThu")]
+
     public class DonMuonTraController : Controller
     {
         private readonly AppDbContext _context;
@@ -61,28 +64,37 @@ namespace appmvclibrary.Areas.QuanLyDonMuonTra.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id)
         {
-            var phieuMuonTra = _context.PhieuMuonTras
-                        .Include(x => x.sach)
-                        .FirstOrDefault(x => x.Id == id);
-            if (phieuMuonTra != null)
-            {   
-                phieuMuonTra.sach.Quantity = phieuMuonTra.sach.Quantity - 1;
-                phieuMuonTra.TrangThai = true;
-                var lichSuMuonTra = new LichSuMuonTra()
-                {
-                    Name = phieuMuonTra.Name,
-                    MaSinhVien = phieuMuonTra.MaSinhVien,
-                    Lop = phieuMuonTra.Lop,
-                    PhieuMuonTras = new List<PhieuMuonTra>() {
-                        phieuMuonTra
-                    }
-                };
+            var order = await _context.Orders
+                        .Include(x => x.LichSuMuonTra)
+                        .FirstOrDefaultAsync(x => x.Id == id);
+            var lichSu = await _context.LichSuMuonTras
+                         .Include(x => x.Orders)
+                            .ThenInclude(x => x.PhieuMuonTra)
+                            .ThenInclude(x => x.sach)
+                         .FirstOrDefaultAsync(x => x.Id == order.LichSuMuonTra.Id);
 
-                _context.LichSuMuonTras.Add(lichSuMuonTra);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            lichSu.TrangThai = true;
+            var phieuMuonTras = lichSu.Orders.Select(x => x.PhieuMuonTra);
+            foreach (var s in phieuMuonTras)
+            {
+                foreach (var a in s)
+                {
+                    a.TrangThai = true;
+                }
             }
-            return View(phieuMuonTra);
+            foreach (var s in phieuMuonTras)
+            {
+                var sa = s.Select(x => x.sach);
+                foreach (var sach in sa)
+                {
+                    sach.Quantity = sach.Quantity - 1;
+                    _context.Sachs.Update(sach);
+                }
+            }
+            _context.Orders.Remove(order);
+            _context.LichSuMuonTras.Update(lichSu);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "DonMuonTra", new { area = "QuanLyDonMuonTra" });
         }
 
         // GET: QuanLyDonMuonTra/DonMuonTra/Edit/5

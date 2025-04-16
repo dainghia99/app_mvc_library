@@ -61,17 +61,12 @@
                 
             </div>
             <div class="form-group">
-                <label asp-for="NgayTra" class="control-label"></label>
-                <input asp-for="NgayTra" class="form-control" />
-                <span asp-validation-for="NgayTra" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="sach" class="control-label"></label>
                 <input asp-for="sach" value="@ViewBag.Sach.TenSach" class="form-control" />
                 <span asp-validation-for="sach" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Mượn sách" class="btn btn-primary" />
+                <input type="submit" value="Trả sách" class="btn btn-primary" />
             </div>
         </form>
     </div>

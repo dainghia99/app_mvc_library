@@ -20,5 +20,13 @@ namespace App.Areas.Identity.Models.ManageViewModels
 
       [Display(Name = "Ngày sinh")]
       public DateTime? BirthDate { get; set; }
-  }
+      [Display(Name = "Mã sinh viên")]
+      public string? StudentCode { get;  set; }
+      [Display(Name = "Khoa")]
+      public string? Khoa { get;  set; }
+      [Display(Name = "Lớp")]
+      public string? Lop { get;  set; }
+      [Display(Name = "Họ tên đầy đủ")]
+      public string? FullName { get;  set; }
+    }
 }

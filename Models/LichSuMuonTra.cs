@@ -16,7 +16,10 @@ namespace appmvclibrary.Models
         public string MaSinhVien { get; set; }
         [Display(Name = "Lớp")]
         public string Lop { get; set; }
-        public List<PhieuMuonTra> PhieuMuonTras { get; set; }
+
+        public bool TrangThai { get; set; }
+        public Sach? sach { get; set; }
+        public List<Order>? Orders { get; set; }
 
     }
 }

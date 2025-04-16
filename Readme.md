@@ -1,12 +1,10 @@
 # Những phần đã thêm
 
-- Tích hợp song Identity
+- Hoàn tất trang profile của user
 
 # Những phần cần làm tiếp
 
-- Cần chỉnh sửa lại giao diện trang hồ sơ cá nhân của Identity (trong controller ManageController và View tương ứng)
-
-- Cần tích hợp thư viện Identity để làm phần trả sách vì liên quan đến phần render ra giao diện người dùng (Cần đăng nhập để biết là ai đang đăng nhập nhằm mục đích render ra các sách cho đúng người mượn tránh râu ông này cắm cằm bà kia)
+- Thêm chức năng trả sách
 
 # Ý tưởng làm phần trả sách
 
